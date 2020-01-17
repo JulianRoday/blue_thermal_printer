@@ -575,7 +575,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   public Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
     Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
     Canvas can = new Canvas(outputimage);
-    can.drawRGB(255,255,255); //This represents White color
+    can.drawARGB(0,128,128,128); //This represents White color
     can.drawBitmap(Src, padding_x, padding_y, null);
     return outputimage;
   }
