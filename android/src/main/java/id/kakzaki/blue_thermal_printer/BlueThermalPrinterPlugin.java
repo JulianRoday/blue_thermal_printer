@@ -57,6 +57,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   private static ConnectedThread THREAD = null;
   private final Registrar registrar;
   private BluetoothAdapter mBluetoothAdapter;
+  private static OutputStream outputStreamNew;
 
   private Result pendingResult;
 
@@ -554,12 +555,12 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
     try {
       Bitmap bm = BitmapFactory.decodeFile(pathImage);
-      Bitmap bmp=Bitmap.createScaledBitmap(bm, 20, 20, false);
+      Bitmap bmp = Bitmap.createScaledBitmap(bm, 20, 20, false);
 
       if (bmp != null) {
         byte[] command = Utils.decodeBitmap(bmp);
-        THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
-        write(command);
+        outputStreamNew.write(PrinterCommands.ESC_ALIGN_CENTER);
+        printBmp(command);
       } else {
         Log.e("Print Photo error", "the file isn't exists");
       }
@@ -567,6 +568,15 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
       result.error("write_error", ex.getMessage(), exceptionToString(ex));
+    }
+  }
+
+  private void printBmp(byte[] msg) {
+    try {
+      // Print normal text
+      outputStream.write(msg);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
