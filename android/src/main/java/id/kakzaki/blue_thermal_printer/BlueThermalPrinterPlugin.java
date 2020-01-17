@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.os.Handler;
