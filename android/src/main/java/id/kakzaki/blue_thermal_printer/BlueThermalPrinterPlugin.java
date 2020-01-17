@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -557,7 +556,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     try {
       Bitmap bm = BitmapFactory.decodeFile(pathImage);
       Bitmap bmp=Bitmap.createScaledBitmap(bm, 75, 75, false);
-      Bitmap finalBmp = mergeToPin(bmp,bmp);
+      Bitmap finalBmp = pad(bmp, 150, 0);
 
       if (finalBmp != null) {
         byte[] command = Utils.decodeBitmap(finalBmp);
@@ -573,20 +572,22 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
-//  public Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
-//    Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
-//    Canvas can = new Canvas(outputimage);
-//    can.drawBitmap(Src, padding_x, padding_y, null);
-//    return outputimage;
-//  }
+  public Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
+    Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
+    Canvas can = new Canvas(outputimage);
+    can.drawARGB(255,255,255,255); //This represents White color
+    can.drawBitmap(Src, padding_x, padding_y, null);
+    return outputimage;
+  }
 
-  private Bitmap createBitmap(Rect rectImage, int i, int j) {
+  public Bitmap createBitmap(Rect rectImage, int i, int j) {
 
     Paint p = new Paint();
     p.setStyle(Style.FILL_AND_STROKE);
     p.setAntiAlias(true);
     p.setFilterBitmap(true);
     p.setDither(true);
+    p.setColor(Color.WHITE);
 
     Bitmap bitmap = Bitmap.createBitmap(rectImage.width() * 2,
             rectImage.height() * 2, Bitmap.Config.ARGB_8888);
@@ -596,16 +597,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     c.drawRect(rectImage.left, rectImage.top, rectImage.right,
             rectImage.bottom, p);
     return bitmap;
-  }
 
-  private static Bitmap mergeToPin(Bitmap left, Bitmap right) {
-    Bitmap result = Bitmap.createBitmap(left.getWidth(), left.getHeight(), left.getConfig());
-    Canvas canvas = new Canvas(result);
-    int widthleft = left.getWidth();
-    int widthright = right.getWidth();
-    canvas.drawBitmap(left, 0f, 0f, null);
-    canvas.drawBitmap(right, widthleft, 0f, null);
-    return result;
   }
 
   private void printQRcode(Result result, String textToQR, int width, int height, int align) {
