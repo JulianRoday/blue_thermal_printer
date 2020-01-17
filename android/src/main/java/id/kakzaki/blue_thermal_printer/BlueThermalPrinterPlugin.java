@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.awt.Color;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
@@ -588,7 +587,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     p.setAntiAlias(true);
     p.setFilterBitmap(true);
     p.setDither(true);
-    p.setColor(new Color(255, 255, 255));
 
     Bitmap bitmap = Bitmap.createBitmap(rectImage.width() * 2,
             rectImage.height() * 2, Bitmap.Config.ARGB_8888);
