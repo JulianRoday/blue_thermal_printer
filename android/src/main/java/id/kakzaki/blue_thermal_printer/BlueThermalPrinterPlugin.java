@@ -554,7 +554,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
     try {
       Bitmap bm = BitmapFactory.decodeFile(pathImage);
-      Bitmap bmp=Bitmap.createScaledBitmap(bm, 75, 75, false);
+      Bitmap bmp=Bitmap.createScaledBitmap(bm, 20, 20, false);
 
       if (bmp != null) {
         byte[] command = Utils.decodeBitmap(bmp);
