@@ -574,7 +574,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   private void printBmp(byte[] msg) {
     try {
       // Print normal text
-      outputStream.write(msg);
+      outputStreamNew.write(msg);
     } catch (IOException e) {
       e.printStackTrace();
     }
