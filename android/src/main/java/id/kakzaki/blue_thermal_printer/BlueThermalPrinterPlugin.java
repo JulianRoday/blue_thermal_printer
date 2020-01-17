@@ -559,7 +559,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       if (bmp != null) {
         byte[] command = Utils.decodeBitmap(bmp);
         THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
-        printText(command);
+        write(command.getBytes());
       } else {
         Log.e("Print Photo error", "the file isn't exists");
       }
@@ -567,16 +567,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
       result.error("write_error", ex.getMessage(), exceptionToString(ex));
-    }
-  }
-
-  private void printText(byte[] msg) {
-    final OutputStream outputStream;
-    try {
-      // Print normal text
-      outputStream.write(msg);
-    } catch (IOException e) {
-      e.printStackTrace();
     }
   }
 
