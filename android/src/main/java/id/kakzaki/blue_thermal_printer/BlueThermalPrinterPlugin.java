@@ -571,8 +571,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   }
 
   private void printText(byte[] msg) {
-    private final OutputStream outputStream;
-    
+    final OutputStream outputStream;
     try {
       // Print normal text
       outputStream.write(msg);
