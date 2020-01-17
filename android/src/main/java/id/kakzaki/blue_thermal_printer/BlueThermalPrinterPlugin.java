@@ -580,26 +580,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     return outputimage;
   }
 
-  public Bitmap createBitmap(Rect rectImage, int i, int j) {
-
-    Paint p = new Paint();
-    p.setStyle(Style.FILL_AND_STROKE);
-    p.setAntiAlias(true);
-    p.setFilterBitmap(true);
-    p.setDither(true);
-    p.setColor(Color.WHITE);
-
-    Bitmap bitmap = Bitmap.createBitmap(rectImage.width() * 2,
-            rectImage.height() * 2, Bitmap.Config.ARGB_8888);
-
-    Canvas c = new Canvas(bitmap);
-//      c.drawColor(Color.RED);
-    c.drawRect(rectImage.left, rectImage.top, rectImage.right,
-            rectImage.bottom, p);
-    return bitmap;
-
-  }
-
   private void printQRcode(Result result, String textToQR, int width, int height, int align) {
     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
     if (THREAD == null) {
