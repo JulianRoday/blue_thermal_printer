@@ -2,6 +2,7 @@ package id.kakzaki.blue_thermal_printer;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
@@ -72,12 +73,12 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     MethodChannel channel = new MethodChannel(registrar.messenger(), NAMESPACE + "/methods");
     EventChannel stateChannel = new EventChannel(registrar.messenger(), NAMESPACE + "/state");
     EventChannel readChannel = new EventChannel(registrar.messenger(), NAMESPACE + "/read");
-		if (registrar.activity() != null){
-			BluetoothManager mBluetoothManager = (BluetoothManager) registrar.activity()
-							.getSystemService(Context.BLUETOOTH_SERVICE);
-			assert mBluetoothManager != null;
-			this.mBluetoothAdapter = mBluetoothManager.getAdapter();
-		}
+    if (registrar.activity() != null){
+      BluetoothManager mBluetoothManager = (BluetoothManager) registrar.activity()
+              .getSystemService(Context.BLUETOOTH_SERVICE);
+      assert mBluetoothManager != null;
+      this.mBluetoothAdapter = mBluetoothManager.getAdapter();
+    }
     channel.setMethodCallHandler(this);
     stateChannel.setStreamHandler(stateStreamHandler);
     readChannel.setStreamHandler(readResultsHandler);
@@ -297,13 +298,23 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
 
     for (BluetoothDevice device : mBluetoothAdapter.getBondedDevices()) {
       Map<String, Object> ret = new HashMap<>();
-      ret.put("address", device.getAddress());
-      ret.put("name", device.getName());
-      ret.put("type", device.getType());
-      list.add(ret);
+      if(isAPrinter(device) == true) {
+        ret.put("address", device.getAddress());
+        ret.put("name", device.getName());
+        ret.put("type", device.getType());
+        list.add(ret);
+      }
     }
 
     result.success(list);
+  }
+
+  private static boolean isAPrinter(BluetoothDevice device){
+    int printerMask = 0b000001000000011010000000;
+    int fullCod = device.getBluetoothClass().hashCode();
+    Log.d(TAG, "FULL COD: " + fullCod);
+    Log.d(TAG, "MASK RESULT " + (fullCod & printerMask));
+    return (fullCod & printerMask) == printerMask;
   }
 
   private String exceptionToString(Exception ex) {
