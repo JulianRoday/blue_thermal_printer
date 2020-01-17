@@ -559,7 +559,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       if (bmp != null) {
         byte[] command = Utils.decodeBitmap(bmp);
         THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
-        write(command.getBytes());
+        write(command);
       } else {
         Log.e("Print Photo error", "the file isn't exists");
       }
