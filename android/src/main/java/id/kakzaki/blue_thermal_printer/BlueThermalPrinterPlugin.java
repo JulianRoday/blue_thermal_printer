@@ -555,8 +555,8 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
     try {
       Bitmap bm = BitmapFactory.decodeFile(pathImage);
-      Bitmap bmp=Bitmap.createScaledBitmap(bm, 75, 75, false);
-      Bitmap finalBmp = pad(bmp, 150, 0);
+      Bitmap bmp = Bitmap.createScaledBitmap(bm, 75, 75, false);
+      Bitmap finalBmp = pad(bmp, 150);
 
       if (finalBmp != null) {
         byte[] command = Utils.decodeBitmap(finalBmp);
@@ -572,12 +572,12 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
-  public Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
-    Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
-    Canvas can = new Canvas(outputimage);
-    can.drawARGB(0,0,0,0); //This represents White color
-    can.drawBitmap(Src, padding_x, padding_y, null);
-    return outputimage;
+  public Bitmap pad(Bitmap bmp, int borderSize) {
+    Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+    Canvas canvas = new Canvas(bmpWithBorder);
+    canvas.drawColor(0xffffffff);
+    canvas.drawBitmap(bmp, borderSize, borderSize, null);
+    return bmpWithBorder;
   }
 
   private void printQRcode(Result result, String textToQR, int width, int height, int align) {
