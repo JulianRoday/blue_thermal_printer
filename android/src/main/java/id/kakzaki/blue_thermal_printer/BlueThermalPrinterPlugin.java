@@ -577,6 +577,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     Canvas canvas = new Canvas(bmpWithBorder);
     canvas.drawColor(0xffffffff);
     canvas.drawBitmap(bmp, borderSize, borderSize, null);
+    canvas.drawColor(0x000000);
     return bmpWithBorder;
   }
 
