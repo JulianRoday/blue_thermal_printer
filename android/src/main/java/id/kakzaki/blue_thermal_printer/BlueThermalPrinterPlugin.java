@@ -581,7 +581,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   }
 
   private void printQRcode(Result result, String textToQR, int width, int height, int align) {
-    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
     if (THREAD == null) {
       result.error("write_error", "not connected", null);
       return;
@@ -601,12 +600,12 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           THREAD.write(PrinterCommands.ESC_ALIGN_RIGHT);
           break;
       }
-      BitMatrix bitMatrix = multiFormatWriter.encode(textToQR, BarcodeFormat.QR_CODE, width, height);
-      BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-      Bitmap bmp = barcodeEncoder.createBitmap(bitMatrix);
 
-      if (bmp != null) {
-        byte[] command = Utils.decodeBitmap(bmp);
+      Bitmap bmp = createBarcodeBitmap(textToQR,width,height);
+      Bitmap finalBmp = addWhiteBorder(bmp,100);
+
+      if (finalBmp != null) {
+        byte[] command = Utils.decodeBitmap(finalBmp);
         THREAD.write(command);
       } else {
         Log.e("Print Photo error", "the file isn't exists");
@@ -618,6 +617,25 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
+  private Bitmap createBarcodeBitmap(String data, int width, int height) throws WriterException {
+    MultiFormatWriter writer = new MultiFormatWriter();
+
+    // Use 1 as the height of the matrix as this is a 1D Barcode.
+    BitMatrix bm = writer.encode(data, BarcodeFormat.CODE_128, width, 1);
+    int bmWidth = bm.getWidth();
+
+    Bitmap imageBitmap = Bitmap.createBitmap(bmWidth, height, Bitmap.Config.ARGB_8888);
+
+    for (int i = 0; i < bmWidth; i++) {
+      // Paint columns of width 1
+      int[] column = new int[height];
+      Arrays.fill(column, bm.get(i, 0) ? Color.BLACK : Color.WHITE);
+      imageBitmap.setPixels(column, 0, 1, i, 0, 1, height);
+    }
+
+    return imageBitmap;
+  }
+  
   private class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream inputStream;
