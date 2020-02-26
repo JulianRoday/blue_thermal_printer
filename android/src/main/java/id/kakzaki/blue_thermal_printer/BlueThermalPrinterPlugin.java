@@ -604,7 +604,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       }
 
       Bitmap bmp = createBarcodeBitmap(textToQR,width,height);
-      Bitmap finalBmp = addWhiteBorder(bmp,100);
+      Bitmap finalBmp = addWhiteBorder(bmp,70);
 
       if (finalBmp != null) {
         byte[] command = Utils.decodeBitmap(finalBmp);
