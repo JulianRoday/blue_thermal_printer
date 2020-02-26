@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -635,7 +636,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
 
     return imageBitmap;
   }
-  
+
   private class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream inputStream;
